@@ -1,0 +1,24 @@
+{
+  "name": "todolistproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SandyRoxx/to-do-list.git"
+  },
+  "author": "sandy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SandyRoxx/to-do-list/issues"
+  },
+  "homepage": "https://github.com/SandyRoxx/to-do-list#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.3"
+  }
+}
