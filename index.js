@@ -15,11 +15,10 @@ let tasks=[];
  app.use('/',express.static('public'));
 
  app.post('/add',function(req,res){
-     try{
-        
+     try{ 
         db.insertNode(req.body.task,function(insertedId){
-           tasks.push({"id":insertedId,"task":req.body.task});
-            res.send({"id":insertedId,"task":req.body.task});
+           tasks.push({"_id":insertedId,"task":req.body.task});
+            res.send({"_id":insertedId,"task":req.body.task});
 
         });
      }catch(err){

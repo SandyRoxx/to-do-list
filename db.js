@@ -27,7 +27,6 @@ function insertNode(task,cb){
     });
 }
 function deleteNode(id,cb){
-    console.log(id);
     collection.deleteOne({_id:new mongodb.ObjectID(id)},function(err,result){
         if(err){
             console.log(err);

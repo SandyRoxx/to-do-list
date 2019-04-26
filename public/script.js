@@ -1,7 +1,7 @@
 (function() {
 
-    let inp = document.getElementById('inp');
-    let result = document.getElementById('result');
+    var inp = document.getElementById('inp');
+    var result = document.getElementById('result');
     var taskList = [];
     getArray();
     
@@ -12,7 +12,7 @@
     });
 
     function addLi(){
-        let val = inp.value;
+        var val = inp.value;
        
         fetch('/add',{
            method:'POST',
@@ -23,7 +23,7 @@
             if(data.status!==200){
                 return;
             }
-            return data.json()
+            return data.json();
         }).then(function(result){
             taskList.push(result);
             display(result);
@@ -37,26 +37,26 @@
     }
 
     function display(obj) {
-        let li = document.createElement('li');
+        var li = document.createElement('li');
         li.setAttribute('id', obj._id);
 
-        let spanleft = document.createElement('span');
+        var spanleft = document.createElement('span');
         spanleft.classList.add('left');
         spanleft.addEventListener('click', deleteLi, false);
-        let ileft = document.createElement('i');
+        var ileft = document.createElement('i');
         ileft.classList.add('fa', 'fa-trash');
         spanleft.append(ileft);
         li.append(spanleft);
 
-        let spancenter = document.createElement('span');
-        let dataNode= document.createTextNode(obj.task);
+        var spancenter = document.createElement('span');
+        var dataNode= document.createTextNode(obj.task);
         spancenter.append(dataNode);
         li.append(spancenter);
 
-        let spanright = document.createElement('span');
+        var spanright = document.createElement('span');
         spanright.classList.add('right');
         spanright.addEventListener('click', updateLi, false);
-        let iright = document.createElement('i');
+        var iright = document.createElement('i');
         iright.classList.add('fa', 'fa-edit');
         spanright.append(iright);
         li.append(spanright);
@@ -67,7 +67,7 @@
     function updateLi() {
         var spancenter = this.previousSibling;
         var li=this.parentNode;
-        let pid = li.id;
+        var pid = li.id;
         index = taskList.map(function(obj) { return obj._id; }).indexOf(pid);
         var input = document.createElement('input');
         input.type = 'text';
@@ -78,7 +78,7 @@
         input.focus();
         input.addEventListener('keypress', function(event) {
             if (event.keyCode == 13) {
-                let newvalue =input.value;
+                var newvalue =input.value;
                 fetch('/update',{
                     method:'POST',
                     headers:new Headers({'content-type': 'application/json'}),
@@ -105,9 +105,9 @@
 
 
     function deleteLi() {
-        let that = this;
-        let pid = this.parentNode.id;
-        index = taskList.map(function(obj) { return obj.id; }).indexOf(pid);
+        var that = this;
+        var pid = this.parentNode.id;
+        index = taskList.map(function(obj) { return obj._id; }).indexOf(pid);
        
         fetch('/delete',{method:'POST',
         headers:new Headers({'content-type': 'application/json'}),
