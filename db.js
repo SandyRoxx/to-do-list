@@ -1,4 +1,5 @@
-const MongoClient=require('mongodb').MongoClient;
+const mongodb = require('mongodb');
+const MongoClient=mongodb.MongoClient;
 
 const url = 'mongodb://localhost:27017';
 let collection = '';
@@ -21,12 +22,13 @@ function insertNode(task,cb){
         if(err){
             console.log(err);
         }else{
-            cb();
+            cb(result.insertedId);
         }  
     });
 }
-function deleteNode(val,cb){
-    collection.deleteOne({task:val},function(err,result){
+function deleteNode(id,cb){
+    console.log(id);
+    collection.deleteOne({_id:new mongodb.ObjectID(id)},function(err,result){
         if(err){
             console.log(err);
         }else{
@@ -34,8 +36,8 @@ function deleteNode(val,cb){
         }
     });
 }
-function updateNode(oldval,newval,cb){
-    collection.updateOne({task:oldval},{$set:{task:newval}},function(err,result){
+function updateNode(id,newval,cb){
+    collection.updateOne({_id:new mongodb.ObjectID(id)},{$set:{task:newval}},function(err,result){
         if(err){
             console.log(err);
         }else{
@@ -44,6 +46,7 @@ function updateNode(oldval,newval,cb){
     });
 }
 function getData(cb){
+
     collection.find({}).toArray(function(err,result){
         if(err){
             console.log(err);

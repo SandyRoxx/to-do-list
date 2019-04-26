@@ -17,13 +17,13 @@
         fetch('/add',{
            method:'POST',
            headers:new Headers({'content-type': 'application/json'}),
-           body:JSON.stringify({"val":val})
+           body:JSON.stringify({"task":val})
 
         }).then(function(data){
             if(data.status!==200){
                 return;
             }
-            return data.text()
+            return data.json()
         }).then(function(result){
             taskList.push(result);
             display(result);
@@ -36,9 +36,9 @@
 
     }
 
-    function display(val) {
-
+    function display(obj) {
         let li = document.createElement('li');
+        li.setAttribute('id', obj._id);
 
         let spanleft = document.createElement('span');
         spanleft.classList.add('left');
@@ -49,7 +49,7 @@
         li.append(spanleft);
 
         let spancenter = document.createElement('span');
-        let dataNode= document.createTextNode(val);
+        let dataNode= document.createTextNode(obj.task);
         spancenter.append(dataNode);
         li.append(spancenter);
 
@@ -66,15 +66,15 @@
 
     function updateLi() {
         var spancenter = this.previousSibling;
-        var parent=this.parentNode;
-        let oldvalue=spancenter.textContent;
-        let index = taskList.indexOf(oldvalue);
+        var li=this.parentNode;
+        let pid = li.id;
+        index = taskList.map(function(obj) { return obj._id; }).indexOf(pid);
         var input = document.createElement('input');
         input.type = 'text';
         input.value = spancenter.textContent;
         input.style.width="240px";
         input.style.height="40px";
-        parent.replaceChild(input, spancenter);
+        li.replaceChild(input, spancenter);
         input.focus();
         input.addEventListener('keypress', function(event) {
             if (event.keyCode == 13) {
@@ -82,7 +82,7 @@
                 fetch('/update',{
                     method:'POST',
                     headers:new Headers({'content-type': 'application/json'}),
-                    body:JSON.stringify({"index":index,"oldvalue":oldvalue,"newvalue":newvalue})
+                    body:JSON.stringify({"index":index,"id":pid,"newvalue":newvalue})
                 }).then(function(data){
                     if(data.status!==200){
                         return;
@@ -90,9 +90,9 @@
                     return data.json();
                 }).then(function(result){
                     spancenter.innerHTML=newvalue;
-                    parent.replaceChild(spancenter, input);
+                    li.replaceChild(spancenter, input);
                     taskList=result;
-                    localStorage.setItem('tsak',JSON.stringify(taskList));
+                    localStorage.setItem('task',JSON.stringify(taskList));
 
                 }).catch(function(err){
                     console.log(err);
@@ -106,12 +106,13 @@
 
     function deleteLi() {
         let that = this;
-        let text = this.nextSibling.textContent;
-        let index = taskList.indexOf(text);
+        let pid = this.parentNode.id;
+        index = taskList.map(function(obj) { return obj.id; }).indexOf(pid);
        
         fetch('/delete',{method:'POST',
         headers:new Headers({'content-type': 'application/json'}),
-        body:JSON.stringify({"index":index})
+        body:JSON.stringify({"index":index,"id":pid})
+
         }).then(function(data){
             if(data.status!==200){
                 return;
@@ -134,7 +135,7 @@
                 if(data.status!==200){
                     return;
                 }
-                return data.json()
+                return data.json();
             }).then(function(result){
                 taskList=result;
                 localStorage.setItem('task',JSON.stringify(taskList));

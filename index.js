@@ -16,10 +16,11 @@ let tasks=[];
 
  app.post('/add',function(req,res){
      try{
-        tasks.push(req.body.val);
         
-        db.insertNode(req.body.val,function(result){
-            res.send(req.body.val);
+        db.insertNode(req.body.task,function(insertedId){
+           tasks.push({"id":insertedId,"task":req.body.task});
+            res.send({"id":insertedId,"task":req.body.task});
+
         });
      }catch(err){
         console.log(err);
@@ -28,9 +29,11 @@ let tasks=[];
 
  app.post('/delete',function(req,res){
      try{
-        let index = req.body.index; 
+        let index = req.body.index;
+        let id=req.body.id; 
         tasks.splice(index,1);
-        db.deleteNode(tasks[index],function(result){
+        db.deleteNode(id,function(result){
+            console.log(result.result);
             res.send(tasks);
         });
      }catch(err){
@@ -41,11 +44,11 @@ let tasks=[];
 
  app.post('/update',function(req,res){
      try{
+        let id=req.body.id;
         let index = req.body.index;
-        let oldvalue= req.body.oldvalue;
         let newvalue=req.body.newvalue;
-        tasks[index]=newvalue;
-        db.updateNode(oldvalue,newvalue,function(result){
+        tasks[index].task=newvalue;
+        db.updateNode(id,newvalue,function(result){
             console.log(result.result);
             res.send(tasks);
         });
@@ -67,16 +70,14 @@ let tasks=[];
 
  function refilling(){
     db.getData(function(result){
-        result.forEach(function(i){
-            tasks.push(i.task);
-        })
-    })
+        tasks=result;    
+    });
     
 }
 
  app.listen(5000,function(err){
      try{
-        console.log(" Server on port 5000"); 
+        console.log("Connected Successfully to Server on port 5000"); 
         db.connect(function(){
             refilling();
         });
