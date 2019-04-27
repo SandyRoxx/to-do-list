@@ -2,6 +2,8 @@ const express= require('express');
 const bodyParser= require('body-parser');
 const db=require('./db');
 
+var port = process.env.port || 8080;
+
 let app = express();
 
 
@@ -12,7 +14,7 @@ let tasks=[];
  app.use(bodyParser.urlencoded({extended: false }));
 
 
- app.use('/',express.static('public'));
+ app.use(express.static(__dirname+"/public"));
 
  app.post('/add',function(req,res){
      try{ 
@@ -74,9 +76,9 @@ let tasks=[];
     
 }
 
- app.listen(5000,function(err){
+ app.listen(port,function(err){
      try{
-        console.log("Connected Successfully to Server on port 5000"); 
+        console.log(`Connected Successfully to Server on port ${port}`); 
         db.connect(function(){
             refilling();
         });

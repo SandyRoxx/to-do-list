@@ -1,7 +1,7 @@
 const mongodb = require('mongodb');
 const MongoClient=mongodb.MongoClient;
 
-const url = 'mongodb://localhost:27017';
+const url = `mongodb+srv://sandy:sandy786@cluster0-yvdqu.mongodb.net/test?retryWrites=true`;
 let collection = '';
 const dbName = 'todolist';
 
